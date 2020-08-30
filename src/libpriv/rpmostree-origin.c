@@ -28,6 +28,17 @@
 #include "rpmostree-util.h"
 #include "rpmostree-rpm-util.h"
 
+#ifndef __GLIBC__
+#define strndupa(s, n) \
+  ({ \
+    const char *__old = (s); \
+    size_t __len = strnlen(__old, (n)); \
+    char *__new = (char *)alloca(__len + 1); \
+    __new[__len] = '\0'; \
+    (char *)memcpy(__new, __old, __len); \
+  })
+#endif
+
 struct RpmOstreeOrigin {
   guint refcount;
 

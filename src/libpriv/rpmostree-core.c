@@ -43,6 +43,17 @@
 #include "rpmostree-output.h"
 #include "rpmostree-rust.h"
 
+#ifndef __GLIBC__
+#define strndupa(s, n) \
+  ({ \
+    const char *__old = (s); \
+    size_t __len = strnlen(__old, (n)); \
+    char *__new = (char *)alloca(__len + 1); \
+    __new[__len] = '\0'; \
+    (char *)memcpy(__new, __old, __len); \
+  })
+#endif
+
 #define RPMOSTREE_MESSAGE_COMMIT_STATS SD_ID128_MAKE(e6,37,2e,38,41,21,42,a9,bc,13,b6,32,b3,f8,93,44)
 #define RPMOSTREE_MESSAGE_SELINUX_RELABEL SD_ID128_MAKE(5a,e0,56,34,f2,d7,49,3b,b1,58,79,b7,0c,02,e6,5d)
 #define RPMOSTREE_MESSAGE_PKG_REPOS SD_ID128_MAKE(0e,ea,67,9b,bf,a3,4d,43,80,2d,ec,99,b2,74,eb,e7)
